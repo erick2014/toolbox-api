@@ -10,6 +10,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(indexRouter);
+app.get("/", (req, res) => {
+  res.send("hello world!");
+});
 
 // error handler
 app.use((err, req, res, next) => {

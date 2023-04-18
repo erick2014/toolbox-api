@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const { fetch, cleanUpData } = require("../utils");
+const fetch = require("../utils/fetch");
+const cleanUpData = require("../utils/dataCleaner");
 
 //get files from remote server
 router.get("/files/data", async function (_, res, next) {
@@ -33,7 +34,7 @@ router.get("/files/data", async function (_, res, next) {
         trackResponses[file] = response;
       }
     }
-    const dataReady = await cleanUpData(trackResponses);
+    const dataReady = cleanUpData(trackResponses);
     res.send(dataReady);
   } catch (error) {
     next(error);
