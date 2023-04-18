@@ -23,34 +23,31 @@ function fetch(options) {
 }
 
 const cleanUpData = async (dataCollected) => {
-  return new Promise((resolve, reject) => {
-    const finalData = Object.keys(dataCollected).map((fileName) => {
+  console.log("data collected ", dataCollected);
+  return new Promise((resolve) => {
+    const finalData = [];
+    Object.keys(dataCollected).forEach((fileName) => {
+      const validLines = [];
       let fileContent = dataCollected[fileName];
 
       if (fileContent.includes("{") || fileContent.includes("}")) {
-        return null;
+        finalData.push({ file: fileName, lines: validLines });
+        return;
       }
 
       const lines = fileContent.split("\n");
       const EXPECTED_LENGTH = lines[0].split(",").length;
-      const validLines = [];
-      console.log("current lines ", lines);
+
       lines.map((line, index) => {
         const lineContent = line.split(",");
-
-        if (lineContent.length === EXPECTED_LENGTH) {
-          if (index === 0) {
-            validLines.push(line);
-            return;
-          }
+        if (index > 0 && lineContent.length === EXPECTED_LENGTH) {
           [file, text, number, hex] = lineContent;
           if (file === fileName && Number(number)) {
-            validLines.push(line);
+            validLines.push({ text, number, hex });
           }
         }
       });
-      console.log("valid lines ", validLines);
-      return { [fileName]: validLines };
+      finalData.push({ file: fileName, lines: validLines });
     });
     resolve(finalData);
   });
