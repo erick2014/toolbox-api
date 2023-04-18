@@ -5,8 +5,9 @@ const cleanUpData = require("../utils/dataCleaner");
 
 //get files from remote server
 router.get("/files/data", async function (_, res, next) {
+  console.log("endpoint has been called!");
   try {
-    const trackResponses = {};
+    const dataCollected = {};
     const options = {
       hostname: "echo-serv.tbxnet.com",
       path: "/v1/secret/files",
@@ -24,18 +25,19 @@ router.get("/files/data", async function (_, res, next) {
       return;
     }
 
-    data.files.map((fileName) => (trackResponses[fileName] = null));
+    data.files.map((fileName) => (dataCollected[fileName] = null));
     const requestOptions = { ...options };
 
     for await (const file of data.files) {
       requestOptions.path = `/v1/secret/file/${file}`;
       const response = await fetch(requestOptions);
-      if (!trackResponses[file]) {
-        trackResponses[file] = response;
+      if (!dataCollected[file]) {
+        dataCollected[file] = response;
       }
     }
-    const dataReady = cleanUpData(trackResponses);
-    res.send(dataReady);
+    console.log("dataCollected ", dataCollected);
+    const dataReady = cleanUpData(dataCollected);
+    res.json(dataReady);
   } catch (error) {
     next(error);
   }

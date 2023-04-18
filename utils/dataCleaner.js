@@ -19,7 +19,6 @@ const cleanUpData = (dataCollected) => {
         }
       }
     });
-    console.log("validLines ", validLines);
     finalData.push({ file: fileName, lines: validLines });
   });
   return finalData;
