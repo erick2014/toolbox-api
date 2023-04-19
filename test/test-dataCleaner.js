@@ -45,7 +45,7 @@ describe("Data cleaner util", () => {
     expect(response).to.deep.equal([{ file: "test6.csv", lines: [] }]);
   });
 
-  it.only("should filter line by 'hex' column", () => {
+  it("should filter line by 'hex' column", () => {
     const fakeResponse =
       "file,text,number,hex\ntest18.csv,FTqc\ntest18.csv,aDBHwweAySBZqaV,79,jz778f18c6d5c41320c8ed8043849c\ntest18.csv,xONCtBsOzWpdw,82852,jz216a52a0848cf313984c4232f42e\ntest18.csv,iZMGmUi,19652,jz6ed57c37fc2bd8f804e1c6b65cf3\ntest18.csv,VjNLcxUfFXWZcRLwHQsBBmxj,6215,jz884d0dddb6b0e90415d00c2be2af\ntest18.csv,DykoIfMHmaBPs,5020,jzc5ad2d0c4eee1618d17b5e26e1c6";
     const response = cleanUpData({
@@ -55,43 +55,38 @@ describe("Data cleaner util", () => {
   });
 
   it("should return valid lines", () => {
-    const fakeResponseTest1 = `file,text,number,hex\ntest1.csv,qewN\ntest1.csv,YvTZluVlNJuIPERTY,249432,jzbf7ef63b347612f96884e3a3a149\ntest1.csv,OMTIYCcqwNCENRsjRDbjUGhks,378,jz70d955eea20858d6c5c117624e1d\ntest1.csv,hmNvkKREdBSJNLmikze,17709342,jz8f7ba608558093e30f5e8dee6343\ntest1.csv,QkFRqLtXTW,1992727,jzac938401c5a5c3f500f0adb13056\ntest1.csv,HDzoPWI,05,jz812f1acc607c4aeacc03e72b51af`;
-
+    const fakeResponse =
+      "file,text,number,hex\nfile1.csv,RgTya,64075909,70ad29aacf0b690b0467fe2b2767f765\nfile1.csv,AtjW,6,d33a8ca5d36d3106219f66f939774cf5\nfile1.csv,PNzRfORtKtEDOzmIVrQuSh,74088708,3e29651a63a5202a5661e05a060401fb\nfile1.csv,d,6173,f9e1bcdb9e3784acc448af34f4727252";
+    const response = cleanUpData({
+      "file1.csv": fakeResponse,
+    });
     const expectResponse = [
       {
-        file: "test1.csv",
+        file: "file1.csv",
         lines: [
           {
-            text: "YvTZluVlNJuIPERTY",
-            number: "249432",
-            hex: "jzbf7ef63b347612f96884e3a3a149",
+            text: "RgTya",
+            number: "64075909",
+            hex: "70ad29aacf0b690b0467fe2b2767f765",
           },
           {
-            text: "OMTIYCcqwNCENRsjRDbjUGhks",
-            number: "378",
-            hex: "jz70d955eea20858d6c5c117624e1d",
+            text: "AtjW",
+            number: "6",
+            hex: "d33a8ca5d36d3106219f66f939774cf5",
           },
           {
-            text: "hmNvkKREdBSJNLmikze",
-            number: "17709342",
-            hex: "jz8f7ba608558093e30f5e8dee6343",
+            text: "PNzRfORtKtEDOzmIVrQuSh",
+            number: "74088708",
+            hex: "3e29651a63a5202a5661e05a060401fb",
           },
           {
-            text: "QkFRqLtXTW",
-            number: "1992727",
-            hex: "jzac938401c5a5c3f500f0adb13056",
-          },
-          {
-            text: "HDzoPWI",
-            number: "05",
-            hex: "jz812f1acc607c4aeacc03e72b51af",
+            text: "d",
+            number: "6173",
+            hex: "f9e1bcdb9e3784acc448af34f4727252",
           },
         ],
       },
     ];
-    const responseTwo = cleanUpData({
-      "test1.csv": fakeResponseTest1,
-    });
-    expect(responseTwo).to.deep.equal(expectResponse);
+    expect(response).to.deep.equal(expectResponse);
   });
 });
