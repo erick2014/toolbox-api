@@ -4,10 +4,29 @@ const { fetch, getRequestOptions } = require("../utils/fetch");
 const cleanUpData = require("../utils/dataCleaner");
 
 //get files from remote server
-router.get("/files/data", async function (_, res, next) {
-  console.log("endpoint has been called!");
+router.get("/files/data", async function (req, res, next) {
+  const dataCollected = {};
+  const fileNameFromQueryParam = req.query.fileName;
   try {
-    const dataCollected = {};
+    console.log(
+      "endpoint has been called! with params? ",
+      fileNameFromQueryParam
+    );
+
+    if (fileNameFromQueryParam) {
+      const fileName = fileNameFromQueryParam.includes(".csv")
+        ? fileNameFromQueryParam
+        : `${fileNameFromQueryParam}.csv`;
+
+      const options = getRequestOptions(`/v1/secret/file/${fileName}`);
+      const response = await fetch(options);
+      console.log("response ", response);
+      dataCollected[fileName] = response;
+      const dataReady = cleanUpData(dataCollected);
+      res.json(dataReady);
+      return;
+    }
+
     const options = getRequestOptions("/v1/secret/files");
     const response = await fetch(options);
     const data = JSON.parse(response);
