@@ -1,5 +1,15 @@
 const https = require("https");
 
+const getRequestOptions = (path, method = "GET") => ({
+  hostname: "echo-serv.tbxnet.com",
+  path,
+  method,
+  headers: {
+    "Content-Type": "application/json",
+    authorization: "Bearer aSuperSecretKey",
+  },
+});
+
 function fetch(options) {
   return new Promise((resolve, reject) => {
     const req = https.request(options, (response) => {
@@ -22,4 +32,4 @@ function fetch(options) {
   });
 }
 
-module.exports = fetch;
+module.exports = { fetch, getRequestOptions };

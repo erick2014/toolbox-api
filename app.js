@@ -1,5 +1,5 @@
 const express = require("express");
-const indexRouter = require("./routes/index");
+const filesRouter = require("./routes");
 
 const app = express();
 const PORT = 3000;
@@ -14,7 +14,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(indexRouter);
+app.use(filesRouter);
 
 // error handler
 app.use((err, req, res, next) => {

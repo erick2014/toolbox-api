@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const fetch = require("../utils/fetch");
+const { fetch, getRequestOptions } = require("../utils/fetch");
 const cleanUpData = require("../utils/dataCleaner");
 
 //get files from remote server
@@ -8,15 +8,7 @@ router.get("/files/data", async function (_, res, next) {
   console.log("endpoint has been called!");
   try {
     const dataCollected = {};
-    const options = {
-      hostname: "echo-serv.tbxnet.com",
-      path: "/v1/secret/files",
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: "Bearer aSuperSecretKey",
-      },
-    };
+    const options = getRequestOptions("/v1/secret/files");
     const response = await fetch(options);
     const data = JSON.parse(response);
 
@@ -41,6 +33,12 @@ router.get("/files/data", async function (_, res, next) {
   } catch (error) {
     next(error);
   }
+});
+
+router.get("/files/list", async function (_, res, next) {
+  const response = await fetch(getRequestOptions("/v1/secret/files"));
+  const data = JSON.parse(response);
+  res.json(data);
 });
 
 module.exports = router;
