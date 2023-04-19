@@ -5,14 +5,10 @@ const cleanUpData = require("../utils/dataCleaner");
 
 //get files from remote server
 router.get("/files/data", async function (req, res, next) {
+  console.log("files/data endpoint called");
   const dataCollected = {};
   const fileNameFromQueryParam = req.query.fileName;
   try {
-    console.log(
-      "endpoint has been called! with params? ",
-      fileNameFromQueryParam
-    );
-
     if (fileNameFromQueryParam) {
       const fileName = fileNameFromQueryParam.includes(".csv")
         ? fileNameFromQueryParam
@@ -20,7 +16,6 @@ router.get("/files/data", async function (req, res, next) {
 
       const options = getRequestOptions(`/v1/secret/file/${fileName}`);
       const response = await fetch(options);
-      console.log("response ", response);
       dataCollected[fileName] = response;
       const dataReady = cleanUpData(dataCollected);
       res.json(dataReady);
@@ -46,7 +41,6 @@ router.get("/files/data", async function (req, res, next) {
         dataCollected[file] = response;
       }
     }
-    console.log("dataCollected ", dataCollected);
     const dataReady = cleanUpData(dataCollected);
     res.json(dataReady);
   } catch (error) {
