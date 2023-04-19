@@ -45,6 +45,15 @@ describe("Data cleaner util", () => {
     expect(response).to.deep.equal([{ file: "test6.csv", lines: [] }]);
   });
 
+  it.only("should filter line by 'hex' column", () => {
+    const fakeResponse =
+      "file,text,number,hex\ntest18.csv,FTqc\ntest18.csv,aDBHwweAySBZqaV,79,jz778f18c6d5c41320c8ed8043849c\ntest18.csv,xONCtBsOzWpdw,82852,jz216a52a0848cf313984c4232f42e\ntest18.csv,iZMGmUi,19652,jz6ed57c37fc2bd8f804e1c6b65cf3\ntest18.csv,VjNLcxUfFXWZcRLwHQsBBmxj,6215,jz884d0dddb6b0e90415d00c2be2af\ntest18.csv,DykoIfMHmaBPs,5020,jzc5ad2d0c4eee1618d17b5e26e1c6";
+    const response = cleanUpData({
+      "test18.csv": fakeResponse,
+    });
+    expect(response).to.deep.equal([{ file: "test18.csv", lines: [] }]);
+  });
+
   it("should return valid lines", () => {
     const fakeResponseTest1 = `file,text,number,hex\ntest1.csv,qewN\ntest1.csv,YvTZluVlNJuIPERTY,249432,jzbf7ef63b347612f96884e3a3a149\ntest1.csv,OMTIYCcqwNCENRsjRDbjUGhks,378,jz70d955eea20858d6c5c117624e1d\ntest1.csv,hmNvkKREdBSJNLmikze,17709342,jz8f7ba608558093e30f5e8dee6343\ntest1.csv,QkFRqLtXTW,1992727,jzac938401c5a5c3f500f0adb13056\ntest1.csv,HDzoPWI,05,jz812f1acc607c4aeacc03e72b51af`;
 
